@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require "domain_crawler/version"
 
 module DomainCrawler
