@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'domain_crawler/version'
 require 'domain_crawler/config'
 
 Gem::Specification.new do |gem|
