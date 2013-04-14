@@ -1,5 +1,52 @@
 #!/usr/bin/env ruby
 
 require 'domain_crawler'
+require 'optparse'
+require 'ostruct'
 
-puts "domain_crawler version #{DomainCrawler::VERSION}"
+version = DomainCrawler::VERSION
+homepage = DomainCrawler::HOMEPAGE
+options = OpenStruct.new
+
+option_parser = OptionParser.new do |o|
+  o.banner = <<-EOT
+
+  domain_crawler v. #{version}
+
+  This program is intended to crawl all links on a website.
+  Please visit #{homepage} for source code and documentation.
+EOT
+
+  o.set_program_name "domain_crawler v. #{version}"
+  o.separator ""
+  o.separator "usage: domain_crawler http(s)://www.domain.com [options]"
+  o.separator ""
+
+  o.on_tail("-h", "--help", "show this message") do
+    puts o
+    puts
+    exit
+  end
+
+  o.on_tail("-v", "--version", "show version") do
+    puts version
+    exit
+  end
+end
+
+def extract_domain(options)
+  is_domain_given?
+  options.domain = ARGV.shift
+  options
+end
+
+def is_domain_given?
+  unless (ARGV[0] =~ /^https?:\/\//) == 0
+    puts "\n  You have to provide at least a domain like http(s)://www.example.com\n\n"
+    exit(0)
+  end
+end
+
+options = extract_domain(options)
+option_parser.parse!(ARGV)
+
