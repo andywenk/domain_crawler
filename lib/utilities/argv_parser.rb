@@ -14,16 +14,8 @@ module Utilities
 
     def parse
       option_parser = OptionParser.new do |o|
-        o.banner = <<-EOT
-
-  domain_crawler v. #{version}
-
-  This program is intended to crawl all links on a website and produce
-  an output created upon the given options.
-  Please visit #{homepage} for source code and documentation.
-EOT
-
-        o.set_program_name "domain_crawler v. #{version}"
+        o.banner = banner_message
+        o.set_program_name "domain_crawler v. #{@version}"
         o.separator ""
         o.separator "usage: domain_crawler http(s)://www.domain.com [options]"
         o.separator ""
@@ -44,8 +36,13 @@ EOT
     end
 
     def extract_domain
+      return if help_requested?
       is_domain_given?
       @options.domain = @args.shift
+    end
+
+    def help_requested?
+      (@args[0] =~ /^-h|--help$/) == 0
     end
 
     def is_domain_given?
@@ -53,6 +50,17 @@ EOT
         puts "\n  You have to provide at least a domain like http(s)://www.example.com\n\n"
         exit(0)
       end
+    end
+
+    def banner_message
+      <<-EOT
+
+  domain_crawler v. #{@version}
+
+  This program is intended to crawl all links on a website and produce
+  an output created upon the given options.
+  Please visit #{@homepage} for source code and documentation.
+EOT
     end
   end
 end

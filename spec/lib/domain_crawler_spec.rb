@@ -12,4 +12,10 @@ describe DomainCrawler do
       DomainCrawler::VERSION.should match(/^\d\.\d\.\d$/)
     end
   end
+
+  describe 'CONFIG' do
+    it "should have a hompage as a String" do
+      DomainCrawler::HOMEPAGE.should be_an_instance_of(String)
+    end
+  end
 end

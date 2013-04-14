@@ -22,3 +22,4 @@ end
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 
 require 'domain_crawler'
+require 'utilities'
