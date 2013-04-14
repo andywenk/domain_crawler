@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'domain_crawler'
+
+puts "domain_crawler version #{DomainCrawler::VERSION}"
