@@ -2,7 +2,6 @@
 
 require 'domain_crawler'
 require 'utilities'
+require 'pry'
 
-argv_parser = Utilities::ArgvParser.new(ARGV)
-options = argv_parser.parse
-
+DomainCrawler.run(ARGV)

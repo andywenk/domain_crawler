@@ -5,18 +5,19 @@ require 'ostruct'
 
 module Utilities
   class ArgvParser
+    attr_accessor :args, :options
+
     def initialize(args)
       @args = args
-      @version = DomainCrawler::VERSION
-      @homepage = DomainCrawler::HOMEPAGE
       @options = OpenStruct.new
-      @options = extract_domain
+      ArgvHelper.args = @args
+      @options.domain = ArgvHelper.extract_domain
     end
 
     def parse
       option_parser = OptionParser.new do |o|
-        o.banner = banner_message
-        o.set_program_name "domain_crawler v. #{@version}"
+        o.banner = ArgvHelper.banner_message
+        o.set_program_name "domain_crawler v. #{DomainCrawler::VERSION}"
         o.separator ""
         o.separator "usage: domain_crawler http(s)://www.domain.com [options]"
         o.separator ""
@@ -26,7 +27,7 @@ module Utilities
         end
 
         o.on("-o", "--output STRING", "write results to this output file") do |output|
-          @options. output = output_location(output)
+          @options.output = output_location(output)
         end
 
         o.on("-r", "--rel", "follow relative urls") do
@@ -49,6 +50,8 @@ module Utilities
         end
       end
 
+      option_parser.parse!(@args)
+
       rescue OptionParser::MissingArgument => error
         puts "Recheck your arguments please -> #{error}"
         exit
@@ -56,36 +59,6 @@ module Utilities
       rescue OptionParser::InvalidOption => error
         puts "There is a problem with your options -> #{error}"
         exit
-
-      option_parser.parse!(@args)
-    end
-
-    def extract_domain
-      return if help_requested?
-      is_domain_given?
-      @options.domain = @args.shift
-    end
-
-    def help_requested?
-      (@args[0] =~ /^-h|--help$/) == 0
-    end
-
-    def is_domain_given?
-      unless (@args[0] =~ /^https?:\/\//) == 0
-        puts "\n  You have to provide at least a domain like http(s)://www.example.com\n\n"
-        exit(0)
-      end
-    end
-
-    def banner_message
-      <<-EOT
-
-  domain_crawler v. #{@version}
-
-  This program is intended to crawl all links on a website and produce
-  an output created upon the given options.
-  Please visit #{@homepage} for source code and documentation.
-EOT
     end
   end
 end
