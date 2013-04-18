@@ -15,7 +15,12 @@ module DomainCrawler
     def parse
       @doc = Nokogiri::HTML(open(@domain))
       urls = links_from_domain
-      pages = pages(urls)
+      begin
+        pages = pages(urls)
+      rescue Exception => e
+        puts
+        puts "[ERROR] #{e.message}"
+      end
     end
 
     def links_from_domain
@@ -55,7 +60,7 @@ module DomainCrawler
       urls.relative.each do |abs|
         begin
           page = OpenStruct.new()
-          url = open(origin + abs, :allow_redirections => :safe)
+          url = open(@domain + abs, :allow_redirections => :safe)
           page.url = abs
           page.content = 'url.read'
           page.md5 = Digest::MD5.hexdigest(url.read)
