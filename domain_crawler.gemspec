@@ -20,6 +20,10 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.3'
 
   # dependencies for production
+  gem.add_development_dependency('nokogiri')
+  gem.add_development_dependency('open-uri')
+  gem.add_development_dependency('open_uri_redirections')
+  gem.add_development_dependency('digest/md5')
 
   # dependencies for development
   gem.add_development_dependency('rspec')

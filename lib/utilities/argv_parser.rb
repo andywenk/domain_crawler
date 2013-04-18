@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 require 'optparse'
 require 'ostruct'
 
@@ -20,6 +21,22 @@ module Utilities
         o.separator "usage: domain_crawler http(s)://www.domain.com [options]"
         o.separator ""
 
+        o.on("-a", "--abs", "follow absolute urls") do
+          @options.absolute = true
+        end
+
+        o.on("-o", "--output STRING", "write results to this output file") do |output|
+          @options. output = output_location(output)
+        end
+
+        o.on("-r", "--rel", "follow relative urls") do
+          @options.relative = true
+        end
+
+        o.on("-s", "--save", "save data to CouchDB") do
+          @options.database = true
+        end
+
         o.on_tail("-h", "--help", "show this message") do
           puts o
           puts
@@ -31,6 +48,14 @@ module Utilities
           exit
         end
       end
+
+      rescue OptionParser::MissingArgument => error
+        puts "Recheck your arguments please -> #{error}"
+        exit
+
+      rescue OptionParser::InvalidOption => error
+        puts "There is a problem with your options -> #{error}"
+        exit
 
       option_parser.parse!(@args)
     end
